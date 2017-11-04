@@ -36,16 +36,25 @@ void creat(MGraph *G) {
 }
 
 
-int isbest(int i, int bestpath[], int p)//检测改节点是否已经加入bestpath[]中
+int isbest(int i, int bestpath[], int p,int a[],int n)//检测改节点是否已经加入bestpath[]中
 {
-	int k;
+	int k,q;
+	int m = 0;
+	for (q = 0; q < n; q++)
+	{
+		if (i == a[q]-1)
+			break;
+		else
+			m++;
+	}
+	
 	for (k = 1; k <= p; k++)
 	{
 		if (i == bestpath[k])
 			break;
 
 	}
-	if (k != p + 1)//新测试节点在a[]中
+	if ((k != p + 1)||(m==n))//新测试节点在a[]中
 		return 1;
 	else
 		return 0;
@@ -64,32 +73,32 @@ void path(MGraph *G,int a[],int n) {
 	int i, j;
 	bestpath[0] = 0;//起点为0，即城市A
 
-	for (int p = 0; p<num - 1; p++)//依次求每个最优节点，每次循环得到一个新的最优城市放到bestpath[]中
+	for (int p = 0; p<n - 1; p++)//依次求每个最优节点，每次循环得到一个新的最优城市放到bestpath[]中
 	{
 		for (int kk = 0; kk<num; kk++)
 			ff[kk] = max;//便于后面求最小值
 		for (i = 1; i<num; i++)//起点A不算，从非起点开始找寻最优城市
 		{
-			if (isbest(i, bestpath, p))//该点已经在bestpath[]中的话，忽略
+			if (isbest(i, bestpath, p,a,n))//该点已经在bestpath[]中的话，忽略
 				continue;
 			else//计算该点的g值
 				gg[i] = g + G->arcs[bestpath[p]][i];//i点的g值
 
 			for (int m = 0; m<num; m++)//开始计算h值
 			{
-				if (isbest(m, bestpath, p))//该点已经在bestpath[]中的话，忽略
+				if (isbest(m, bestpath, p,a,n))//该点已经在bestpath[]中的话，忽略
 					continue;
 				for (int t = m + 1; t<num; t++)
 
 				{
-					if (isbest(t, bestpath, p))
+					if (isbest(t, bestpath, p,a,n))
 						continue;
-					if (m != 0 || t != i || p == num - 2)//不是最后一个点的话，不算A点到这个点长度
+					if (m != 0 || t != i || p == n - 2)//不是最后一个点的话，不算A点到这个点长度
 						if (G->arcs[m][t]<min)
 							min = G->arcs[m][t];
 				}
 			}
-			h = min*(num - p - 1);//h值
+			h = min*(n - p - 1);//h值
 			ff[i] = gg[i] + h;//第i个节点的f值
 			min = max;//重新赋值最大，以便下次循环
 
@@ -109,15 +118,15 @@ void path(MGraph *G,int a[],int n) {
 	}
 
 	printf("最优路径为:");
-	for (i = 0; i<num; i++)
+	for (i = 0; i<n; i++)
 		printf("%d->", bestpath[i] + 1);
 	printf("1\n");
 
 	printf("总路程为:");
 	int sum = 0;
-	for (i = 0; i<num - 1; i++)
+	for (i = 0; i<n - 1; i++)
 		sum = sum + G->arcs[bestpath[i]][bestpath[i + 1]];
-	sum = sum + G->arcs[bestpath[num - 1]][0];//总路程最后一个城市要回到A，所以加上其距离
+	sum = sum + G->arcs[bestpath[n - 1]][0];//总路程最后一个城市要回到A，所以加上其距离
 	printf("%d\n", sum);
 }
 
