@@ -7,23 +7,46 @@
 #define N 5
 
 typedef int AdjMatrix[MAX][MAX];
+typedef int Time[MAX];
 typedef struct
 {
 	AdjMatrix arcs;
+	Time t;
+	
 }MGraph;
 
 const int max = 9999;
 const int ax = 50;
 
-void creat(MGraph *G) {
-	FILE *fp;
+void creat(MGraph *G,int m) {
+	FILE *fp1;
+	FILE *fp2 = NULL;
 	int i, j;
-	fp = fopen("test.txt", "r");
+	fp1 = fopen("test.txt", "r");
 	for (i = 0; i < N; i++) {
 		for (j = 0; j < N; j++)
-			fscanf(fp, "%d", &G->arcs[i][j]);
+			fscanf(fp1, "%d", &G->arcs[i][j]);
 	}
-	fclose(fp);
+	fclose(fp1);
+
+	switch (m)
+	{
+	case 1:
+		fp2 = fopen("time1.txt", "r");
+		break;
+	case 2:
+		fp2 = fopen("time2.txt", "r");
+		break;
+	case 3:
+		fp2 = fopen("time3.txt", "r");
+		break;
+	default:
+		printf("你输入了错误的数字");
+		break;
+	}
+	for (i = 0; i < N; i++)
+		fscanf(fp2, "%d", &G->t[i]);
+	fclose(fp2);
 
 	for (i = 0; i <= N; i++)
 		for (j = 0; j <= N; j++)
@@ -61,12 +84,16 @@ int isbest(int i, int bestpath[], int p,int a[],int n)//检测改节点是否已
 
 }
 
+int judge(MGraph *G,int j) {
 
-void path(MGraph *G,int a[],int n) {
+}
+
+
+void path(MGraph *G,int a[],int n,int bestpath[]) {
 
 	int min = max;
 	int minf = max;
-	int bestpath[50];//最佳路径
+	//int bestpath[50];//最佳路径
 	int f = 0, g = 0, h = 0;
 	int ff[50];//依次求每个城市的f值
 	int gg[50];//城市的g值
@@ -128,13 +155,23 @@ void path(MGraph *G,int a[],int n) {
 		sum = sum + G->arcs[bestpath[i]][bestpath[i + 1]];
 	sum = sum + G->arcs[bestpath[n - 1]][0];//总路程最后一个城市要回到A，所以加上其距离
 	printf("%d\n", sum);
+	//for (i = 0; i < n ; i++)
+	//	printf("%d ", G->t[bestpath[i]+1]);
+	//printf("\n");
+}
+
+void time(MGraph *G,int n,int bestpath[]) {
+
 }
 
 
 void main()
 {	
-	int n,i;
+	int n,i,m;
+	int bestpath[50];
 	int a[10] = { 0 };
+	printf("选择你的出行方式：（1为步行，2位自行车，3为汽车）");
+	scanf("%d", &m);
 	printf("输入你想去几个地点：");
 	scanf("%d", &n);
 	printf("输入要去的地点:");
@@ -147,7 +184,7 @@ void main()
 	printf("\n");
 
 	MGraph G;
-	creat(&G);
-	path(&G,a,n);
+	creat(&G,m);
+	path(&G,a,n,bestpath);
 	system("pause");
 }
