@@ -150,13 +150,7 @@ void path(MGraph *G, int a[], int n, int bestpath[]) {
 
 		for (i = 0; i<num; i++)//找寻最优点，即f值最小者
 		{
-			//j = G->t[i];
-			//if (judge(G, j)) {
-			//	bestpath[p + 1] = i;
-			//	break;
-			//}
-			//else 
-				if (ff[i]<minf)
+			if (ff[i]<minf)
 			{
 				minf = ff[i];
 				bestpath[p + 1] = i;
