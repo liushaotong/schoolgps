@@ -104,11 +104,19 @@ int judge(MGraph *G, int time) {
 		return 0;
 }
 
+int trans(int input,int output) {
+	int i, j;
+	i = input / 60;
+	j = input % 60;
+	output = i * 100 + j;
+	return output;
+}
 
 void path(MGraph *G, int a[], int n, int bestpath[]) {
 
 	int min = max;
 	int minf = max;
+	int out=0;
 	//int bestpath[50];//最佳路径
 	int f = 0, g = 0, h = 0;
 	int ff[50];//依次求每个城市的f值
@@ -150,7 +158,13 @@ void path(MGraph *G, int a[], int n, int bestpath[]) {
 
 		for (i = 0; i<num; i++)//找寻最优点，即f值最小者
 		{
-			if (ff[i]<minf)
+			//j = G->t[i];
+			//if (judge(G, j)) {
+			//	bestpath[p + 1] = i;
+			//	break;
+			//}
+			//else 
+				if (ff[i]<minf)
 			{
 				minf = ff[i];
 				bestpath[p + 1] = i;
@@ -160,7 +174,7 @@ void path(MGraph *G, int a[], int n, int bestpath[]) {
 		minf = max;//重新赋值最大，以便下次循环	
 		g = g + G->arcs[bestpath[p]][bestpath[p + 1]];//更新g值
 		time = time + G->min[bestpath[p]][bestpath[p + 1]];
-		schedule[p] = time;
+		schedule[p] = trans(time, out);
 	}
 
 	printf("最优路径为:");
@@ -175,7 +189,7 @@ void path(MGraph *G, int a[], int n, int bestpath[]) {
 	sum = sum + G->arcs[bestpath[n - 1]][0];//总路程最后一个城市要回到A，所以加上其距离
 	printf("%d\n", sum);
 	time = time + G->min[bestpath[n - 1]][0];
-	schedule[n - 1] = time;
+	schedule[n - 1] = trans(time, out);
 	for (i = 0; i < n; i++)
 		printf("第%d个点的时间为%d\n",i+1,schedule[i]);
 
