@@ -284,9 +284,9 @@ void graph(MGraph *G, int n, int bestpath[]) {
 	int i,p,q;
 	int j = 1;
 	initgraph(884, 480);
-	IMAGE img;
-	loadimage(&img, "img_meitu_1.jpg");
-	putimage(0, 0, &img);
+	IMAGE ditu;
+	loadimage(&ditu, "img_meitu_1.jpg");
+	putimage(0, 0, &ditu);
 	BeginBatchDraw();
 	setlinecolor(RED);
 	setfillcolor(RED);
@@ -323,29 +323,168 @@ void graph(MGraph *G, int n, int bestpath[]) {
     FlushBatchDraw();
 }
 
+void chooseplace(MOUSEMSG m,int i,int a[],IMAGE duigou) {
+	switch (m.uMsg)
+	{
+	case WM_LBUTTONDOWN:
+		if (m.x >= 330 && m.x <= 360 && m.y >= 160 && m.y <= 168) {
+			putimage(200, 200, &duigou);
+		}
+	}
+}
 
 void main()
 {
-	int n=0, i,m=0;
-	char mm[20];
-	char nn[20];
+	int n=0, i=0,m=0;
 	int bestpath[50];
 	int a[10] = { 0 };
-	printf("选择你的出行方式：（1为步行，2位自行车，3为汽车）");
-	scanf("%d", &m);
-	printf("输入你想去几个地点：");
-	scanf("%d", &n);
-	printf("输入要去的地点:");
-	for (i = 0; i<n; i++)
-		scanf("%d", &a[i]);
+	MOUSEMSG m1, m2;
+	IMAGE img_buxing, img_zixingche, img_qiche,testimg,img_duigou;
+	loadimage(&testimg, "test.jpg");
+	loadimage(&img_buxing, "buxing.jpg");
+	loadimage(&img_zixingche, "zixingche.jpg");
+	loadimage(&img_qiche, "qiche.jpg");
+	loadimage(&img_duigou, "1111.jpg");
+	initgraph(640, 320);
+	setbkcolor(WHITE);
+	cleardevice();
+	putimage(190, 160, &testimg);
+	putimage(260, 160, &testimg);
+	putimage(330, 160, &testimg);
+	putimage(400, 160, &testimg);
+	putimage(470, 160, &testimg);
+	settextcolor(BLACK);
+	outtextxy(10, 10, "选择你的出行方式：");
+	putimage(190, 10, &img_buxing);
+	putimage(330, 10, &img_zixingche);
+	putimage(470, 10, &img_qiche);
+	while (1) {
+		if (MouseHit()) {
+			m1 = GetMouseMsg();
+			switch (m1.uMsg)
+			{
+			case WM_LBUTTONDOWN:
+				if (m1.x >= 190 && m1.x <= 220 && m1.y >= 10 && m1.y <= 28) {
+					putimage(200, 35, &img_duigou);
+					m = 1;
+					outtextxy(10, 60, "输入你想去几个地方：");
+					char ch = getc(stdin);
+					outtextxy(170, 60, ch);
+					outtextxy(10, 110, "选择要去的地点：");
+					
+					char chtest[10];
+					chtest[0] = ch;
+					n = atoi(chtest);
 
-	MGraph G;
-	creat(&G, m);
-	path(&G, a, n, bestpath);
-	system("pause");
-	getchar();
-	graph(&G, n, bestpath);
+					while(i<n) {
+						if (MouseHit()) {
+							m2 = GetMouseMsg();
+							switch (m2.uMsg) {
+							case WM_LBUTTONDOWN:
+								if (m2.x >= 190 && m2.x <= 220 && m2.y >= 160 && m2.y <= 178) {
+									putimage(200, 185, &img_duigou);
+									a[i] = 1;
+									i++;
+								}
+								else if (m2.x >= 260 && m2.x <= 290 && m2.y >= 160 && m2.y <= 178) {
+									putimage(270, 185, &img_duigou);
+									a[i] = 2;
+									i++;
+								}
+								else if (m2.x >= 330 && m2.x <= 360 && m2.y >= 160 && m2.y <= 178) {
+									putimage(340, 185, &img_duigou);
+									a[i] = 3;
+									i++;
+								}
+								else if (m2.x >= 400 && m2.x <= 430 && m2.y >= 160 && m2.y <= 178) {
+									putimage(410, 185, &img_duigou);
+									a[i] = 4;
+									i++;
+								}
+								else if (m2.x >= 470 && m2.x <= 500 && m2.y >= 160 && m2.y <= 178) {
+									putimage(480, 185, &img_duigou);
+									a[i] = 5;
+									i++;
+								}
+							}
+						}
+							
+						
+					}
+					//system("pause");
+					closegraph();
+
+					MGraph G;
+					creat(&G, m);
+					path(&G, a, n, bestpath);
+					system("pause");
+					getchar();
+					graph(&G, n, bestpath);
+
+
+					system("pause");
+					//break;
+				}
+				else if (m1.x >= 330 && m1.x <= 360 && m1.y >= 10 && m1.y <= 28) {
+					m = 2;
+					outtextxy(10, 60, "输入你想去几个地方：");
+
+					char ch = getc(stdin);
+					outtextxy(170, 60, ch);
+					outtextxy(10, 110, "选择要去的地点：");
+					system("pause");
+					closegraph();
+					char chtest[10];
+					chtest[0] = ch;
+					n = atoi(chtest);
+					
+					printf("输入要去的地点:");
+					for (i = 0; i < n; i++)
+						scanf("%d", &a[i]);
+
+					MGraph G;
+					creat(&G, m);
+					path(&G, a, n, bestpath);
+					system("pause");
+					getchar();
+					graph(&G, n, bestpath);
+
+
+					system("pause");
+				}
+				else if(m1.x >= 470 && m1.x <= 500 && m1.y >= 10 && m1.y <= 28) {
+					m = 3;
+					outtextxy(10, 60, "输入你想去几个地方：");
+
+					char ch = getc(stdin);
+					outtextxy(170, 60, ch);
+					outtextxy(10, 110, "选择要去的地点：");
+					system("pause");
+					closegraph();
+					char chtest[10];
+					chtest[0] = ch;
+					n = atoi(chtest);
+					
+					printf("输入要去的地点:");
+					for (i = 0; i < n; i++)
+						scanf("%d", &a[i]);
+
+					MGraph G;
+					creat(&G, m);
+					path(&G, a, n, bestpath);
+					system("pause");
+					getchar();
+					graph(&G, n, bestpath);
+
+
+					system("pause");
+				}
+			}
+			
+		}
+		
+	}
+			
+	 closegraph();
 	
-
-	system("pause");
 }
