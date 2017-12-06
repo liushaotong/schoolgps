@@ -4,9 +4,9 @@
 #include <graphics.h>
 #include <conio.h>
 
-#define num 5
+#define num 10
 #define MAX 100
-#define N 5
+#define N 10
 
 typedef int AdjMatrix[MAX][MAX];
 typedef int Time[MAX];
@@ -31,7 +31,7 @@ void creat(MGraph *G, int m) {
 	FILE *fp1,*fp3;
 	FILE *fp2 = NULL;
 	int i, j;
-	fp1 = fopen("test.txt", "r");
+	fp1 = fopen("quanzhi.txt", "r");
 	fp3 = fopen("vextime.txt", "r");
 	for (i = 0; i < N; i++) {
 		for (j = 0; j < N; j++)
@@ -67,11 +67,6 @@ void creat(MGraph *G, int m) {
 	for (i = 0; i <= N; i++)
 		for (j = 0; j <= N; j++)
 			if (G->arcs[i][j] == 0) G->arcs[i][j] = MAX;
-	for (i = 0; i < N; i++) {
-		for (j = 0; j < N; j++)
-			printf("%d ", G->arcs[i][j]);
-		printf("\n");
-	}
 }
 
 
@@ -215,66 +210,277 @@ void path(MGraph *G, int a[], int n, int bestpath[]) {
 void drawline(int input) {
 	switch (input)
 	{
+	case 1:
+		line(480, 87, 400, 100);
+		break;
 	case 2:
 		line(480, 87, 320, 87);
+		break;
+	case 3:
+		line(480, 87, 465, 30);
 		break;
 	case 4:
 		line(480, 87, 320, 257);
 		break;
-	case 3:
-		line(480, 87, 515, 390);
+	case 5:
+		line(480, 87, 430, 230);
 		break;
-	case 1:
+	case 6:
 		line(480, 87, 360, 350);
 		break;
+	case 7:
+		line(480, 87, 420, 350);
+		break;
+	case 8:
+		line(480, 87, 515, 390);
+		break;
+	case 9:
+		line(480, 87, 620, 370);
+		break;
+	case 10:
+		line(480, 87, 400, 100);
+		break;
+	case 12:
+		line(400, 100, 320, 87);
+		break;
+	case 13:
+		line(400, 100, 465, 30);
+		break;
+	case 14:
+		line(400, 100, 320, 257);
+		break;
+	case 15:
+		line(400, 100, 430, 230);
+		break;
+	case 16:
+		line(400, 100, 360, 350);
+		break;
+	case 17:
+		line(400, 100, 420, 350);
+		break;
+	case 18:
+		line(400, 100, 515, 390);
+		break;
+	case 19:
+		line(400, 100, 620, 370);
+		break;
 	case 20:
-		line(320, 87, 480, 87);
+		line(480, 87, 320, 87);
 		break;
 	case 21:
-		line(320, 87, 360, 350);
+		line(400, 100, 320, 87);
 		break;
 	case 23:
-		line(320, 87, 515, 390);
+		line(320, 87, 465, 30);
 		break;
 	case 24:
-		line(320, 257, 320, 87);
+		line(320, 87, 320, 257);
+		break;
+	case 25:
+		line(320, 87, 430, 230);
+		break;
+	case 26:
+		line(320, 87, 360, 350);
+		break;
+	case 27:
+		line(320, 87, 420, 350);
+		break;
+	case 28:
+		line(320, 87, 515, 390);
+		break;
+	case 29:
+		line(320, 87, 620, 370);
+		break;
+	case 30:
+		line(480, 87, 465, 30);
+		break;
+	case 31:
+		line(465, 30, 400, 100);
+		break;
+	case 32:
+		line(465, 30, 320, 87);
+		break;
+	case 34:
+		line(465, 30, 320, 257);
+		break;
+	case 35:
+		line(465, 30, 430, 230);
+		break;
+	case 36:
+		line(465, 30, 360, 350);
+		break;
+	case 37:
+		line(465, 30, 420, 350);
+		break;
+	case 38:
+		line(465, 30, 515, 390);
+		break;
+	case 39:
+		line(465, 30, 620, 370);
 		break;
 	case 40:
-		line(320, 257, 480, 87);
+		line(480, 87, 320, 257);
 		break;
 	case 41:
-		line(320, 257, 360, 350);
+		line(320, 257, 400, 100);
 		break;
 	case 42:
 		line(320, 257, 320, 87);
 		break;
 	case 43:
+		line(320, 257, 465, 30);
+		break;
+	case 45:
+		line(320, 257, 430, 230);
+		break;
+	case 46:
+		line(320, 257, 360, 350);
+		break;
+	case 47:
+		line(320, 257, 420, 350);
+		break;
+	case 48:
 		line(320, 257, 515, 390);
 		break;
-	case 10:
-		line(360, 350, 480, 87);
+	case 49:
+		line(320, 257, 620, 370);
 		break;
-	case 12:
+	case 50:
+		line(480, 87, 430, 230);
+		break;
+	case 51:
+		line(430, 320, 400, 100);
+		break;
+	case 52:
+		line(430, 320, 320, 87);
+		break;
+	case 53:
+		line(430, 320, 465, 30);
+		break;
+	case 54:
+		line(430, 320, 320, 257);
+		break;
+	case 56:
+		line(430, 320, 360, 350);
+		break;
+	case 57:
+		line(430, 320, 420, 350);
+		break;
+	case 58:
+		line(430, 320, 515, 390);
+		break;
+	case 59:
+		line(430, 320, 620, 370);
+		break;
+	case 60:
+		line(480, 87, 360, 350);
+		break;
+	case 61:
+		line(360, 350, 400, 100);
+		break;
+	case 62:
 		line(360, 350, 320, 87);
 		break;
-	case 13:
-		line(360, 350, 515, 390);
+	case 63:
+		line(360, 350, 465, 30);
 		break;
-	case 14:
+	case 64:
 		line(360, 350, 320, 257);
 		break;
-	case 30:
-		line(515, 390, 480, 87);
+	case 65:
+		line(360, 350, 430, 230);
 		break;
-	case 31:
-		line(515, 390, 360, 350);
+	case 67:
+		line(360, 350, 420, 350);
 		break;
-	case 32:
+	case 68:
+		line(360, 350, 515, 390);
+		break;
+	case 69:
+		line(360, 350, 620, 370);
+		break;
+	case 70:
+		line(480, 87, 420, 350);
+		break;
+	case 71:
+		line(420, 350, 400, 100);
+		break;
+	case 72:
+		line(420, 350, 320, 87);
+		break;
+	case 73:
+		line(420, 350, 465, 30);
+		break;
+	case 74:
+		line(420, 350, 320, 257);
+		break;
+	case 75:
+		line(420, 350, 430, 230);
+		break;
+	case 76:
+		line(420, 350, 360, 350);
+		break;
+	case 78:
+		line(420, 350, 515, 390);
+		break;
+	case 79:
+		line(420, 350, 620, 370);
+		break;
+	case 80:
+		line(480, 87, 515, 390);
+		break;
+	case 81:
+		line(515, 390, 400, 100);
+		break;
+	case 82:
 		line(515, 390, 320, 87);
 		break;
-	case 34:
+	case 83:
+		line(515, 390, 465, 30);
+		break;
+	case 84:
 		line(515, 390, 320, 257);
 		break;
+	case 85:
+		line(515, 390, 430, 230);
+		break;
+	case 86:
+		line(515, 390, 360, 350);
+		break;
+	case 87:
+		line(515, 390, 420, 350);
+		break;
+	case 89:
+		line(515, 390, 620, 370);
+		break;
+	case 90:
+		line(480, 87, 620, 370);
+		break;
+	case 91:
+		line(620, 370, 400, 100);
+		break;
+	case 92:
+		line(620, 370, 320, 87);
+		break;
+	case 93:
+		line(620, 370, 465, 30);
+		break;
+	case 94:
+		line(620, 370, 320, 257);
+		break;
+	case 95:
+		line(620, 370, 430, 230);
+		break;
+	case 96:
+		line(620, 370, 360, 350);
+		break;
+	case 97:
+		line(620, 370, 420, 350);
+		break;
+	case 98:
+		line(620, 370, 515, 390);
+		break;
+
 	default:
 		break;
 	}
@@ -290,14 +496,19 @@ void graph(MGraph *G, int n, int bestpath[]) {
 	BeginBatchDraw();
 	setlinecolor(RED);
 	setfillcolor(RED);
-	fillcircle(480, 87, 7);
-	fillcircle(320, 257, 7);
-	fillcircle(320, 87, 7);
-	fillcircle(360, 350, 7);
-	fillcircle(515, 390, 7);
+	fillcircle(480, 87, 7);//宿舍 0
+	fillcircle(400, 100, 7);//图书馆 1
+	fillcircle(320, 87, 7);//1教 2
+	fillcircle(465, 30, 7);//校医院 3
+	fillcircle(320, 257, 7);//信息楼 4
+	fillcircle(430, 230, 7);//3教 5
+	fillcircle(360, 350, 7);//餐厅 6
+	fillcircle(420, 350, 7);//atm 7
+	fillcircle(515, 390, 7);//体育馆 8
+	fillcircle(620, 370, 7);//知行楼 9
 	settextcolor(BLACK);
 	setbkmode(TRANSPARENT);
-	outtextxy(515, 390, "024130");
+	outtextxy(515, 390, "5");
 	outtextxy(480, 87, "1");
 	outtextxy(320, 87, "3");
 	outtextxy(320, 257, "2");
@@ -323,16 +534,6 @@ void graph(MGraph *G, int n, int bestpath[]) {
     FlushBatchDraw();
 }
 
-void chooseplace(MOUSEMSG m,int i,int a[],IMAGE duigou) {
-	switch (m.uMsg)
-	{
-	case WM_LBUTTONDOWN:
-		if (m.x >= 330 && m.x <= 360 && m.y >= 160 && m.y <= 168) {
-			putimage(200, 200, &duigou);
-		}
-	}
-}
-
 void main()
 {
 	int n=0, i=0,m=0;
@@ -340,19 +541,25 @@ void main()
 	int a[10] = { 0 };
 	MOUSEMSG m1, m2;
 	IMAGE img_buxing, img_zixingche, img_qiche,testimg,img_duigou;
+	IMAGE img_1jiao,img_3jiao,img_atm,img_canting,img_sushe,img_tiyuguan,img_tushuguan,img_zhixinglou,img_xiaoyiyuan,img_xinxilou;
 	loadimage(&testimg, "test.jpg");
 	loadimage(&img_buxing, "buxing.jpg");
 	loadimage(&img_zixingche, "zixingche.jpg");
 	loadimage(&img_qiche, "qiche.jpg");
 	loadimage(&img_duigou, "1111.jpg");
+	loadimage(&img_1jiao, "1jiao.jpg");
+	loadimage(&img_3jiao, "3jiao.jpg");
+	loadimage(&img_atm, "atm.jpg");
+	loadimage(&img_canting, "canting.jpg");
+	loadimage(&img_tiyuguan, "tiyuguan.jpg");
+	loadimage(&img_sushe, "sushe.jpg");
+	loadimage(&img_tushuguan, "tushuguan.jpg");
+	loadimage(&img_zhixinglou, "zhixinglou.jpg");
+	loadimage(&img_xiaoyiyuan, "xiaoyiyuan.jpg");
+	loadimage(&img_xinxilou, "xinxilou.jpg");
 	initgraph(640, 320);
 	setbkcolor(WHITE);
 	cleardevice();
-	putimage(190, 160, &testimg);
-	putimage(260, 160, &testimg);
-	putimage(330, 160, &testimg);
-	putimage(400, 160, &testimg);
-	putimage(470, 160, &testimg);
 	settextcolor(BLACK);
 	outtextxy(10, 10, "选择你的出行方式：");
 	putimage(190, 10, &img_buxing);
@@ -367,14 +574,33 @@ void main()
 				if (m1.x >= 190 && m1.x <= 220 && m1.y >= 10 && m1.y <= 28) {
 					putimage(200, 35, &img_duigou);
 					m = 1;
-					outtextxy(10, 60, "输入你想去几个地方：");
+					outtextxy(10, 80, "输入你想去几个地方(0-9)：");
 					char ch = getc(stdin);
-					outtextxy(170, 60, ch);
-					outtextxy(10, 110, "选择要去的地点：");
-					
 					char chtest[10];
 					chtest[0] = ch;
-					n = atoi(chtest);
+					n = atoi(chtest) + 1;
+					if(n==10)
+						outtextxy(190, 80, "10");
+					else
+					{
+						_itoa(n,chtest,10);
+						ch = chtest[0];
+						outtextxy(190, 80, ch);
+					}
+					
+					
+					outtextxy(10, 160, "选择要去的地点：");
+					putimage(190, 160, &img_sushe);
+					putimage(260, 160, &img_tushuguan);
+					putimage(330, 160, &img_1jiao);
+					putimage(400, 160, &img_xiaoyiyuan);
+					putimage(470, 160, &img_xinxilou);
+					putimage(190, 220, &img_3jiao);
+					putimage(260, 220, &img_canting);
+					putimage(330, 220, &img_atm);
+					putimage(400, 220, &img_tiyuguan);
+					putimage(470, 220, &img_zhixinglou);
+					
 
 					while(i<n) {
 						if (MouseHit()) {
@@ -406,12 +632,36 @@ void main()
 									a[i] = 5;
 									i++;
 								}
+								else if (m2.x >= 190 && m2.x <= 220 && m2.y >= 220 && m2.y <= 238) {
+									putimage(200, 245, &img_duigou);
+									a[i] = 6;
+									i++;
+								}
+								else if (m2.x >= 260 && m2.x <= 290 && m2.y >= 220 && m2.y <= 238) {
+									putimage(270, 245, &img_duigou);
+									a[i] = 7;
+									i++;
+								}
+								else if (m2.x >= 330 && m2.x <= 360 && m2.y >= 220 && m2.y <= 238) {
+									putimage(340, 245, &img_duigou);
+									a[i] = 8;
+									i++;
+								}
+								else if (m2.x >= 400 && m2.x <= 430 && m2.y >= 220 && m2.y <= 238) {
+									putimage(410, 245, &img_duigou);
+									a[i] = 9;
+									i++;
+								}
+								else if (m2.x >= 470 && m2.x <= 500 && m2.y >= 220 && m2.y <= 238) {
+									putimage(480, 245, &img_duigou);
+									a[i] = 10;
+									i++;
+								}
 							}
 						}
 							
 						
 					}
-					//system("pause");
 					closegraph();
 
 					MGraph G;
