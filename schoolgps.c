@@ -95,10 +95,10 @@ int isbest(int i, int bestpath[], int p, int a[], int n)//检测改节点是否�
 
 }
 
-int judge(MGraph *G, int time,int n,int a[]) {
+int judgeshangji(MGraph *G, int time,int n,int a[]) {
 	int i,j=0;
 	for (i = 0; i < n; i++) {
-		if (a[i] == 2) {
+		if (a[i] == 10) {
 			if (time <= 480) {
 				j = 1;
 			}
@@ -115,6 +115,21 @@ int judge(MGraph *G, int time,int n,int a[]) {
 	
 }
 
+int judgechifan(MGraph *G, int n, int a[]) {
+	int i, j = 0;
+	for (i = 0; i < n; i++) {
+		if (a[i] == 7) 
+				j = 1;
+		else
+			continue;
+	}
+	if (j == 1)
+		return 1;
+	else
+		return 0;
+
+}
+
 int trans(int input) {
 	int i, j,output;
 	i = input / 60;
@@ -122,19 +137,31 @@ int trans(int input) {
 	output = i * 100 + j;
 	return output;
 }
+int transa(int input) {
+	int i, output;
+	i = input / 100;
+	output = i;
+	return output;
+}
+int transb(int input) {
+	int j, output;
+	j = input % 100;
+	output = j;
+	return output;
+}
 
-void path(MGraph *G, int a[], int n, int bestpath[]) {
+int path(MGraph *G, int a[], int n, int bestpath[],int arrive[],int leave[]) {
 
 	int min = max;
 	int minf = max;
+	int sum = 0;
 	int out=0;
 	int f = 0, g = 0, h = 0;
 	int ff[50];//每个城市的f值
 	int gg[50];//城市的g值
-	int i, j;
+	int i;
 	bestpath[0] = 0;//起点为0
 	int time = 420;//总时间
-	int schedule[N];//每个点的时间
 	for (int p = 0; p<n - 1; p++)
 	{
 		for (int kk = 0; kk<num; kk++)
@@ -165,12 +192,30 @@ void path(MGraph *G, int a[], int n, int bestpath[]) {
 			min = max;
 
 		}
-		//if (judge(G, time, n, a)) {
-		//	bestpath[p + 1] = 1; 
-		//	time = 420;
-		//}
-		//else
-		//{
+		if (judgechifan(G, n, a)) {
+			if (isbest(6, bestpath, p, a, n)==0) {
+				bestpath[p + 1] = 6;
+			}
+			else if (judgeshangji(G, time, n, a)) {
+				bestpath[p + 1] = 9;
+			}
+			else {
+				for (i = 0; i < num; i++)//找寻最优点，即f值最小者
+				{
+					if (ff[i] < minf)
+					{
+						minf = ff[i];
+						bestpath[p + 1] = i;
+					}
+				}
+			}
+
+		}
+		else if (judgeshangji(G, time, n, a)) {
+			bestpath[p + 1] = 9; 
+		}
+		else
+		{
 			for (i = 0; i < num; i++)//找寻最优点，即f值最小者
 			{
 				if (ff[i] < minf)
@@ -179,32 +224,27 @@ void path(MGraph *G, int a[], int n, int bestpath[]) {
 					bestpath[p + 1] = i;
 				}
 			}
-		//} 
+		} 
 
 		minf = max;
 		g = g + G->arcs[bestpath[p]][bestpath[p + 1]];
 		time = time + G->min[bestpath[p]][bestpath[p + 1]];
-		schedule[p] = trans(time);
-	    time = time + G->t[bestpath[p + 1]];
+		arrive[p] = trans(time);
+		if (bestpath[p + 1] == 9) {
+			time = 570;
+			leave[p] = trans(time);
+		}
+		else {
+			time = time + G->t[bestpath[p + 1]];
+			leave[p] = trans(time);
+		}
 	}
-
-	printf("最优路径为:");
-	for (i = 0; i<n; i++)
-		printf("%d->", bestpath[i] + 1);
-	printf("1\n");
-
-	printf("总路程为:");
-	int sum = 0;
 	for (i = 0; i<n - 1; i++)
 		sum = sum + G->arcs[bestpath[i]][bestpath[i + 1]];
 	sum = sum + G->arcs[bestpath[n - 1]][0];//总路程最后一个城市要回到A，所以加上其距离
-	printf("%d\n", sum);
 	time = time + G->min[bestpath[n - 1]][0];
-	schedule[n - 1] = trans(time);
-	for (i = 0; i < n-1; i++) {
-		printf("到达第%d个点的时间为%d，从第%d个点离开时间为%d\n", i + 1, schedule[i],i+1, schedule[i]+trans(G->t[bestpath[i+1]]));
-	}
-	printf("返回第0个点的时间为%d\n", schedule[n-1]);
+	arrive[n - 1] = trans(time);
+	return sum;
 }
 
 void drawline(int input) {
@@ -226,10 +266,10 @@ void drawline(int input) {
 		line(480, 87, 430, 230);
 		break;
 	case 6:
-		line(480, 87, 360, 350);
+		line(480, 87, 410, 310);
 		break;
 	case 7:
-		line(480, 87, 420, 350);
+		line(480, 87, 450, 310);
 		break;
 	case 8:
 		line(480, 87, 515, 390);
@@ -486,10 +526,21 @@ void drawline(int input) {
 	}
 }
 
-void graph(MGraph *G, int n, int bestpath[]) {
+void graph(MGraph *G, int n, int bestpath[],int arrive[], int leave[],int sum) {
+	IMAGE white;
+	loadimage(&white, "white.jpg");
 	int i,p,q;
 	int j = 1;
-	initgraph(884, 480);
+	int aa, bb, cc, dd;
+	char a[5];
+	char b[5];
+	char c[5];
+	char d[5];
+	int arrivetime=0;
+	int leavetime=0;
+	initgraph(884, 570);
+	setbkcolor(WHITE);
+	cleardevice();
 	IMAGE ditu;
 	loadimage(&ditu, "img_meitu_1.jpg");
 	putimage(0, 0, &ditu);
@@ -508,19 +559,30 @@ void graph(MGraph *G, int n, int bestpath[]) {
 	fillcircle(620, 370, 7);//知行楼 9
 	settextcolor(BLACK);
 	setbkmode(TRANSPARENT);
-	outtextxy(515, 390, "5");
-	outtextxy(480, 87, "1");
-	outtextxy(320, 87, "3");
-	outtextxy(320, 257, "2");
-	outtextxy(360, 350, "4");
 	FlushBatchDraw();
 	i = 0;
 	while (1) {
 		getchar();
+		putimage(0,480,&white);
 		p = bestpath[i];
 		q = bestpath[i + 1];
 		j = p * 10 + q;
 		drawline(j);
+		outtextxy(30, 500, "到达该点的时间为：   :     ，从该点离开的时间为：   :     。");
+		arrivetime = arrive[i];
+		leavetime = leave[i];
+		aa= transa(arrivetime);
+		bb = transb(arrivetime);
+		cc = transa(leavetime);
+		dd = transb(leavetime);
+		sprintf(a, "%d", aa);
+		sprintf(b, "%d", bb);
+		sprintf(c, "%d", cc);
+		sprintf(d, "%d", dd);
+		outtextxy(170, 500, a);
+		outtextxy(195, 500, b);
+		outtextxy(380, 500, c);
+		outtextxy(405, 500, d);
 		FlushBatchDraw();
 		i++;
 		if(i==n-1)
@@ -531,13 +593,28 @@ void graph(MGraph *G, int n, int bestpath[]) {
 	j = p * 10 + q;
 	getchar();
 	drawline(j);
-    FlushBatchDraw();
+	putimage(0, 480, &white);
+	outtextxy(30, 500, "返回宿舍的时间为：   :     。");
+	arrivetime = arrive[n-1];
+	aa = transa(arrivetime);
+	bb = transb(arrivetime);
+	sprintf(a, "%d", aa);
+	sprintf(b, "%d", bb);
+	outtextxy(170, 500, a);
+	outtextxy(195, 500, b);
+	outtextxy(30, 540, "总路程为：      米");
+	sprintf(b, "%d", sum);
+	outtextxy(100, 540, b);
+	FlushBatchDraw();
 }
 
 void main()
 {
-	int n=0, i=0,m=0;
+	int n = 0, i = 0, m = 0, summ = 0;
+	int sum[1];
 	int bestpath[50];
+	int arrive[N];
+	int leave[N];
 	int a[10] = { 0 };
 	MOUSEMSG m1, m2;
 	IMAGE img_buxing, img_zixingche, img_qiche,testimg,img_duigou;
@@ -666,10 +743,10 @@ void main()
 
 					MGraph G;
 					creat(&G, m);
-					path(&G, a, n, bestpath);
+					summ=path(&G, a, n, bestpath,arrive,leave);
 					system("pause");
 					getchar();
-					graph(&G, n, bestpath);
+					graph(&G, n, bestpath, arrive, leave, summ);
 
 
 					system("pause");
@@ -770,10 +847,10 @@ void main()
 
 					MGraph G;
 					creat(&G, m);
-					path(&G, a, n, bestpath);
+					summ=path(&G, a, n, bestpath,arrive, leave);
 					system("pause");
 					getchar();
-					graph(&G, n, bestpath);
+					graph(&G, n, bestpath, arrive, leave, summ);
 
 
 					system("pause");
@@ -873,10 +950,10 @@ void main()
 
 					MGraph G;
 					creat(&G, m);
-					path(&G, a, n, bestpath);
+					summ=path(&G, a, n, bestpath, arrive, leave);
 					system("pause");
 					getchar();
-					graph(&G, n, bestpath);
+					graph(&G, n, bestpath, arrive, leave, summ);
 
 
 					system("pause");
