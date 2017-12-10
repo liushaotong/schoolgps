@@ -66,7 +66,7 @@ void creat(MGraph *G, int m) {
 
 	for (i = 0; i <= N; i++)
 		for (j = 0; j <= N; j++)
-			if (G->arcs[i][j] == 0) G->arcs[i][j] = MAX;
+			if (G->arcs[i][j] == 0) G->arcs[i][j] = max;
 }
 
 
@@ -133,7 +133,7 @@ void path(MGraph *G, int a[], int n, int bestpath[]) {
 	int gg[50];//城市的g值
 	int i, j;
 	bestpath[0] = 0;//起点为0
-	int time = 470;//总时间
+	int time = 420;//总时间
 	int schedule[N];//每个点的时间
 	for (int p = 0; p<n - 1; p++)
 	{
@@ -253,10 +253,10 @@ void drawline(int input) {
 		line(400, 100, 430, 230);
 		break;
 	case 16:
-		line(400, 100, 360, 350);
+		line(400, 100, 410, 310);
 		break;
 	case 17:
-		line(400, 100, 420, 350);
+		line(400, 100, 450, 310);
 		break;
 	case 18:
 		line(400, 100, 515, 390);
@@ -280,10 +280,10 @@ void drawline(int input) {
 		line(320, 87, 430, 230);
 		break;
 	case 26:
-		line(320, 87, 360, 350);
+		line(320, 87, 410, 310);
 		break;
 	case 27:
-		line(320, 87, 420, 350);
+		line(320, 87, 450, 310);
 		break;
 	case 28:
 		line(320, 87, 515, 390);
@@ -307,10 +307,10 @@ void drawline(int input) {
 		line(465, 30, 430, 230);
 		break;
 	case 36:
-		line(465, 30, 360, 350);
+		line(465, 30, 410, 310);
 		break;
 	case 37:
-		line(465, 30, 420, 350);
+		line(465, 30, 450, 310);
 		break;
 	case 38:
 		line(465, 30, 515, 390);
@@ -334,10 +334,10 @@ void drawline(int input) {
 		line(320, 257, 430, 230);
 		break;
 	case 46:
-		line(320, 257, 360, 350);
+		line(320, 257, 410, 310);
 		break;
 	case 47:
-		line(320, 257, 420, 350);
+		line(320, 257, 450, 310);
 		break;
 	case 48:
 		line(320, 257, 515, 390);
@@ -349,82 +349,82 @@ void drawline(int input) {
 		line(480, 87, 430, 230);
 		break;
 	case 51:
-		line(430, 320, 400, 100);
+		line(430, 230, 400, 100);
 		break;
 	case 52:
-		line(430, 320, 320, 87);
+		line(430, 230, 320, 87);
 		break;
 	case 53:
-		line(430, 320, 465, 30);
+		line(430, 230, 465, 30);
 		break;
 	case 54:
-		line(430, 320, 320, 257);
+		line(430, 230, 320, 257);
 		break;
 	case 56:
-		line(430, 320, 360, 350);
+		line(430, 230, 410, 310);
 		break;
 	case 57:
-		line(430, 320, 420, 350);
+		line(430, 230, 450, 310);
 		break;
 	case 58:
-		line(430, 320, 515, 390);
+		line(430, 230, 515, 390);
 		break;
 	case 59:
-		line(430, 320, 620, 370);
+		line(430, 230, 620, 370);
 		break;
 	case 60:
-		line(480, 87, 360, 350);
+		line(480, 87, 410, 310);
 		break;
 	case 61:
-		line(360, 350, 400, 100);
+		line(410, 310, 400, 100);
 		break;
 	case 62:
-		line(360, 350, 320, 87);
+		line(410, 310, 320, 87);
 		break;
 	case 63:
-		line(360, 350, 465, 30);
+		line(410, 310, 465, 30);
 		break;
 	case 64:
-		line(360, 350, 320, 257);
+		line(410, 310, 320, 257);
 		break;
 	case 65:
-		line(360, 350, 430, 230);
+		line(410, 310, 430, 230);
 		break;
 	case 67:
-		line(360, 350, 420, 350);
+		line(410, 310, 450, 310);
 		break;
 	case 68:
-		line(360, 350, 515, 390);
+		line(410, 310, 515, 390);
 		break;
 	case 69:
-		line(360, 350, 620, 370);
+		line(410, 310, 620, 370);
 		break;
 	case 70:
-		line(480, 87, 420, 350);
+		line(480, 87, 450, 310);
 		break;
 	case 71:
-		line(420, 350, 400, 100);
+		line(450, 310, 400, 100);
 		break;
 	case 72:
-		line(420, 350, 320, 87);
+		line(450, 310, 320, 87);
 		break;
 	case 73:
-		line(420, 350, 465, 30);
+		line(450, 310, 465, 30);
 		break;
 	case 74:
-		line(420, 350, 320, 257);
+		line(450, 310, 320, 257);
 		break;
 	case 75:
-		line(420, 350, 430, 230);
+		line(450, 310, 430, 230);
 		break;
 	case 76:
-		line(420, 350, 360, 350);
+		line(450, 310, 410, 310);
 		break;
 	case 78:
-		line(420, 350, 515, 390);
+		line(450, 310, 515, 390);
 		break;
 	case 79:
-		line(420, 350, 620, 370);
+		line(450, 310, 620, 370);
 		break;
 	case 80:
 		line(480, 87, 515, 390);
@@ -445,10 +445,10 @@ void drawline(int input) {
 		line(515, 390, 430, 230);
 		break;
 	case 86:
-		line(515, 390, 360, 350);
+		line(515, 390, 410, 310);
 		break;
 	case 87:
-		line(515, 390, 420, 350);
+		line(515, 390, 450, 310);
 		break;
 	case 89:
 		line(515, 390, 620, 370);
@@ -472,10 +472,10 @@ void drawline(int input) {
 		line(620, 370, 430, 230);
 		break;
 	case 96:
-		line(620, 370, 360, 350);
+		line(620, 370, 410, 310);
 		break;
 	case 97:
-		line(620, 370, 420, 350);
+		line(620, 370, 450, 310);
 		break;
 	case 98:
 		line(620, 370, 515, 390);
@@ -502,8 +502,8 @@ void graph(MGraph *G, int n, int bestpath[]) {
 	fillcircle(465, 30, 7);//校医院 3
 	fillcircle(320, 257, 7);//信息楼 4
 	fillcircle(430, 230, 7);//3教 5
-	fillcircle(360, 350, 7);//餐厅 6
-	fillcircle(420, 350, 7);//atm 7
+	fillcircle(410, 310, 7);//餐厅 6
+	fillcircle(450, 310, 7);//atm 7
 	fillcircle(515, 390, 7);//体育馆 8
 	fillcircle(620, 370, 7);//知行楼 9
 	settextcolor(BLACK);
@@ -677,20 +677,96 @@ void main()
 				}
 				else if (m1.x >= 330 && m1.x <= 360 && m1.y >= 10 && m1.y <= 28) {
 					m = 2;
-					outtextxy(10, 60, "输入你想去几个地方：");
-
+					putimage(340, 35, &img_duigou);
+					outtextxy(10, 80, "输入你想去几个地方(0-9)：");
 					char ch = getc(stdin);
-					outtextxy(170, 60, ch);
-					outtextxy(10, 110, "选择要去的地点：");
-					system("pause");
-					closegraph();
 					char chtest[10];
 					chtest[0] = ch;
-					n = atoi(chtest);
-					
-					printf("输入要去的地点:");
-					for (i = 0; i < n; i++)
-						scanf("%d", &a[i]);
+					n = atoi(chtest) + 1;
+					if (n == 10)
+						outtextxy(190, 80, "10");
+					else
+					{
+						_itoa(n, chtest, 10);
+						ch = chtest[0];
+						outtextxy(190, 80, ch);
+					}
+
+
+					outtextxy(10, 160, "选择要去的地点：");
+					putimage(190, 160, &img_sushe);
+					putimage(260, 160, &img_tushuguan);
+					putimage(330, 160, &img_1jiao);
+					putimage(400, 160, &img_xiaoyiyuan);
+					putimage(470, 160, &img_xinxilou);
+					putimage(190, 220, &img_3jiao);
+					putimage(260, 220, &img_canting);
+					putimage(330, 220, &img_atm);
+					putimage(400, 220, &img_tiyuguan);
+					putimage(470, 220, &img_zhixinglou);
+
+
+					while (i<n) {
+						if (MouseHit()) {
+							m2 = GetMouseMsg();
+							switch (m2.uMsg) {
+							case WM_LBUTTONDOWN:
+								if (m2.x >= 190 && m2.x <= 220 && m2.y >= 160 && m2.y <= 178) {
+									putimage(200, 185, &img_duigou);
+									a[i] = 1;
+									i++;
+								}
+								else if (m2.x >= 260 && m2.x <= 290 && m2.y >= 160 && m2.y <= 178) {
+									putimage(270, 185, &img_duigou);
+									a[i] = 2;
+									i++;
+								}
+								else if (m2.x >= 330 && m2.x <= 360 && m2.y >= 160 && m2.y <= 178) {
+									putimage(340, 185, &img_duigou);
+									a[i] = 3;
+									i++;
+								}
+								else if (m2.x >= 400 && m2.x <= 430 && m2.y >= 160 && m2.y <= 178) {
+									putimage(410, 185, &img_duigou);
+									a[i] = 4;
+									i++;
+								}
+								else if (m2.x >= 470 && m2.x <= 500 && m2.y >= 160 && m2.y <= 178) {
+									putimage(480, 185, &img_duigou);
+									a[i] = 5;
+									i++;
+								}
+								else if (m2.x >= 190 && m2.x <= 220 && m2.y >= 220 && m2.y <= 238) {
+									putimage(200, 245, &img_duigou);
+									a[i] = 6;
+									i++;
+								}
+								else if (m2.x >= 260 && m2.x <= 290 && m2.y >= 220 && m2.y <= 238) {
+									putimage(270, 245, &img_duigou);
+									a[i] = 7;
+									i++;
+								}
+								else if (m2.x >= 330 && m2.x <= 360 && m2.y >= 220 && m2.y <= 238) {
+									putimage(340, 245, &img_duigou);
+									a[i] = 8;
+									i++;
+								}
+								else if (m2.x >= 400 && m2.x <= 430 && m2.y >= 220 && m2.y <= 238) {
+									putimage(410, 245, &img_duigou);
+									a[i] = 9;
+									i++;
+								}
+								else if (m2.x >= 470 && m2.x <= 500 && m2.y >= 220 && m2.y <= 238) {
+									putimage(480, 245, &img_duigou);
+									a[i] = 10;
+									i++;
+								}
+							}
+						}
+
+
+					}
+					closegraph();
 
 					MGraph G;
 					creat(&G, m);
@@ -704,20 +780,96 @@ void main()
 				}
 				else if(m1.x >= 470 && m1.x <= 500 && m1.y >= 10 && m1.y <= 28) {
 					m = 3;
-					outtextxy(10, 60, "输入你想去几个地方：");
-
+					putimage(480, 35, &img_duigou);
+					outtextxy(10, 80, "输入你想去几个地方(0-9)：");
 					char ch = getc(stdin);
-					outtextxy(170, 60, ch);
-					outtextxy(10, 110, "选择要去的地点：");
-					system("pause");
-					closegraph();
 					char chtest[10];
 					chtest[0] = ch;
-					n = atoi(chtest);
-					
-					printf("输入要去的地点:");
-					for (i = 0; i < n; i++)
-						scanf("%d", &a[i]);
+					n = atoi(chtest) + 1;
+					if (n == 10)
+						outtextxy(190, 80, "10");
+					else
+					{
+						_itoa(n, chtest, 10);
+						ch = chtest[0];
+						outtextxy(190, 80, ch);
+					}
+
+
+					outtextxy(10, 160, "选择要去的地点：");
+					putimage(190, 160, &img_sushe);
+					putimage(260, 160, &img_tushuguan);
+					putimage(330, 160, &img_1jiao);
+					putimage(400, 160, &img_xiaoyiyuan);
+					putimage(470, 160, &img_xinxilou);
+					putimage(190, 220, &img_3jiao);
+					putimage(260, 220, &img_canting);
+					putimage(330, 220, &img_atm);
+					putimage(400, 220, &img_tiyuguan);
+					putimage(470, 220, &img_zhixinglou);
+
+
+					while (i<n) {
+						if (MouseHit()) {
+							m2 = GetMouseMsg();
+							switch (m2.uMsg) {
+							case WM_LBUTTONDOWN:
+								if (m2.x >= 190 && m2.x <= 220 && m2.y >= 160 && m2.y <= 178) {
+									putimage(200, 185, &img_duigou);
+									a[i] = 1;
+									i++;
+								}
+								else if (m2.x >= 260 && m2.x <= 290 && m2.y >= 160 && m2.y <= 178) {
+									putimage(270, 185, &img_duigou);
+									a[i] = 2;
+									i++;
+								}
+								else if (m2.x >= 330 && m2.x <= 360 && m2.y >= 160 && m2.y <= 178) {
+									putimage(340, 185, &img_duigou);
+									a[i] = 3;
+									i++;
+								}
+								else if (m2.x >= 400 && m2.x <= 430 && m2.y >= 160 && m2.y <= 178) {
+									putimage(410, 185, &img_duigou);
+									a[i] = 4;
+									i++;
+								}
+								else if (m2.x >= 470 && m2.x <= 500 && m2.y >= 160 && m2.y <= 178) {
+									putimage(480, 185, &img_duigou);
+									a[i] = 5;
+									i++;
+								}
+								else if (m2.x >= 190 && m2.x <= 220 && m2.y >= 220 && m2.y <= 238) {
+									putimage(200, 245, &img_duigou);
+									a[i] = 6;
+									i++;
+								}
+								else if (m2.x >= 260 && m2.x <= 290 && m2.y >= 220 && m2.y <= 238) {
+									putimage(270, 245, &img_duigou);
+									a[i] = 7;
+									i++;
+								}
+								else if (m2.x >= 330 && m2.x <= 360 && m2.y >= 220 && m2.y <= 238) {
+									putimage(340, 245, &img_duigou);
+									a[i] = 8;
+									i++;
+								}
+								else if (m2.x >= 400 && m2.x <= 430 && m2.y >= 220 && m2.y <= 238) {
+									putimage(410, 245, &img_duigou);
+									a[i] = 9;
+									i++;
+								}
+								else if (m2.x >= 470 && m2.x <= 500 && m2.y >= 220 && m2.y <= 238) {
+									putimage(480, 245, &img_duigou);
+									a[i] = 10;
+									i++;
+								}
+							}
+						}
+
+
+					}
+					closegraph();
 
 					MGraph G;
 					creat(&G, m);
