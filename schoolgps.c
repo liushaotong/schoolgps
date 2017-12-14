@@ -25,9 +25,8 @@ typedef struct
 }Vertex;
 
 const int max = 9999;
-const int ax = 50;
 
-void creat(MGraph *G, int m) {
+void create(MGraph *G, int m) {
 	FILE *fp1,*fp3;
 	FILE *fp2 = NULL;
 	int i, j;
@@ -95,31 +94,38 @@ int isbest(int i, int bestpath[], int p, int a[], int n)//检测改节点是否�
 
 }
 
-int judgeshangji(MGraph *G, int time,int n,int a[]) {
+int judgeshangji(MGraph *G, int time,int n,int a[],int x) {
 	int i,j=0;
 	for (i = 0; i < n; i++) {
 		if (a[i] == 10) {
-			if (time <= 480) {
+			if (time<= 480) {
 				j = 1;
 			}
 			else
-				continue;
+				j = 2;
 		}
 		else
 			continue;
 	}
 	if (j == 1)
 		return 1;
+	else if (j == 2)
+		return -1;
 	else
 		return 0;
 	
 }
 
-int judgechifan(MGraph *G, int n, int a[]) {
+int judgechifan(MGraph *G, int time,int n, int a[]) {
 	int i, j = 0;
 	for (i = 0; i < n; i++) {
-		if (a[i] == 7) 
+		if (a[i] == 7) {
+			if (time <= 540 && time >= 360) {
 				j = 1;
+			}
+			else
+				continue;
+		}
 		else
 			continue;
 	}
@@ -150,18 +156,18 @@ int transb(int input) {
 	return output;
 }
 
-int path(MGraph *G, int a[], int n, int bestpath[],int arrive[],int leave[]) {
+int path(MGraph *G, int a[], int n, int bestpath[],int arrive[],int leave[],int depaturetime) {
 
 	int min = max;
 	int minf = max;
 	int sum = 0;
 	int out=0;
 	int f = 0, g = 0, h = 0;
-	int ff[50];//每个城市的f值
-	int gg[50];//城市的g值
+	int ff[10];//每个城市的f值
+	int gg[10];//城市的g值
 	int i;
 	bestpath[0] = 0;//起点为0
-	int time = 420;//总时间
+	int time = depaturetime;//总时间
 	for (int p = 0; p<n - 1; p++)
 	{
 		for (int kk = 0; kk<num; kk++)
@@ -192,11 +198,11 @@ int path(MGraph *G, int a[], int n, int bestpath[],int arrive[],int leave[]) {
 			min = max;
 
 		}
-		if (judgechifan(G, n, a)) {
+		if (judgechifan(G, time,n, a)) {
 			if (isbest(6, bestpath, p, a, n)==0) {
 				bestpath[p + 1] = 6;
 			}
-			else if (judgeshangji(G, time, n, a)) {
+			else if (judgeshangji(G, time, n, a,0)) {
 				bestpath[p + 1] = 9;
 			}
 			else {
@@ -211,7 +217,7 @@ int path(MGraph *G, int a[], int n, int bestpath[],int arrive[],int leave[]) {
 			}
 
 		}
-		else if (judgeshangji(G, time, n, a)) {
+		else if (judgeshangji(G, time, n, a,bestpath[p])) {
 			bestpath[p + 1] = 9; 
 		}
 		else
@@ -230,9 +236,17 @@ int path(MGraph *G, int a[], int n, int bestpath[],int arrive[],int leave[]) {
 		g = g + G->arcs[bestpath[p]][bestpath[p + 1]];
 		time = time + G->min[bestpath[p]][bestpath[p + 1]];
 		arrive[p] = trans(time);
+		int judgea;
 		if (bestpath[p + 1] == 9) {
-			time = 570;
-			leave[p] = trans(time);
+			judgea = bestpath[p];
+			if (judgeshangji(G, time, n, a, judgea) == -1) {
+				if (isbest(9, bestpath, p, a, n) == 0)
+					return -1;
+			}
+			else {
+				time = 570;
+				leave[p] = trans(time);
+			}
 		}
 		else {
 			time = time + G->t[bestpath[p + 1]];
@@ -539,6 +553,9 @@ void graph(MGraph *G, int n, int bestpath[],int arrive[], int leave[],int sum) {
 	int arrivetime=0;
 	int leavetime=0;
 	initgraph(884, 570);
+	HWND hwnd = GetHWnd();
+	// 设置窗口标题文字
+	SetWindowText(hwnd, "地图界面");
 	setbkcolor(WHITE);
 	cleardevice();
 	IMAGE ditu;
@@ -560,6 +577,7 @@ void graph(MGraph *G, int n, int bestpath[],int arrive[], int leave[],int sum) {
 	settextcolor(BLACK);
 	setbkmode(TRANSPARENT);
 	FlushBatchDraw();
+	system("pause");
 	i = 0;
 	while (1) {
 		getchar();
@@ -610,8 +628,7 @@ void graph(MGraph *G, int n, int bestpath[],int arrive[], int leave[],int sum) {
 
 void main()
 {
-	int n = 0, i = 0, m = 0, summ = 0;
-	int sum[1];
+	int m = 0;
 	int bestpath[50];
 	int arrive[N];
 	int leave[N];
@@ -619,6 +636,21 @@ void main()
 	MOUSEMSG m1, m2;
 	IMAGE img_buxing, img_zixingche, img_qiche,testimg,img_duigou;
 	IMAGE img_1jiao,img_3jiao,img_atm,img_canting,img_sushe,img_tiyuguan,img_tushuguan,img_zhixinglou,img_xiaoyiyuan,img_xinxilou;
+	IMAGE sushe, tushuguan, yijiao, sanjiao, xiaoyiyuan, canting, xinxilou, zhixinglou, tiyuguan, qukuanji;
+	IMAGE white;
+	loadimage(&white, "white.jpg");
+
+	loadimage(&sushe, "宿舍.jpg");
+	loadimage(&tushuguan, "图书馆.jpg");
+	loadimage(&yijiao, "一教.jpg");
+	loadimage(&sanjiao, "三教.jpg");
+	loadimage(&xiaoyiyuan, "校医院.jpg");
+	loadimage(&canting, "美食园.jpg");
+	loadimage(&xinxilou, "信息楼.jpg");
+	loadimage(&zhixinglou, "知行楼.jpg");
+	loadimage(&tiyuguan, "体育馆.jpg");
+	loadimage(&qukuanji, "取款机.jpg");
+
 	loadimage(&testimg, "test.jpg");
 	loadimage(&img_buxing, "buxing.jpg");
 	loadimage(&img_zixingche, "zixingche.jpg");
@@ -634,336 +666,422 @@ void main()
 	loadimage(&img_zhixinglou, "zhixinglou.jpg");
 	loadimage(&img_xiaoyiyuan, "xiaoyiyuan.jpg");
 	loadimage(&img_xinxilou, "xinxilou.jpg");
-	initgraph(640, 320);
-	setbkcolor(WHITE);
-	cleardevice();
-	settextcolor(BLACK);
-	outtextxy(10, 10, "选择你的出行方式：");
-	putimage(190, 10, &img_buxing);
-	putimage(330, 10, &img_zixingche);
-	putimage(470, 10, &img_qiche);
 	while (1) {
-		if (MouseHit()) {
-			m1 = GetMouseMsg();
-			switch (m1.uMsg)
-			{
-			case WM_LBUTTONDOWN:
-				if (m1.x >= 190 && m1.x <= 220 && m1.y >= 10 && m1.y <= 28) {
-					putimage(200, 35, &img_duigou);
-					m = 1;
-					outtextxy(10, 80, "输入你想去几个地方(0-9)：");
-					char ch = getc(stdin);
-					char chtest[10];
-					chtest[0] = ch;
-					n = atoi(chtest) + 1;
-					if(n==10)
-						outtextxy(190, 80, "10");
-					else
-					{
-						_itoa(n,chtest,10);
-						ch = chtest[0];
-						outtextxy(190, 80, ch);
-					}
-					
-					
-					outtextxy(10, 160, "选择要去的地点：");
-					putimage(190, 160, &img_sushe);
-					putimage(260, 160, &img_tushuguan);
-					putimage(330, 160, &img_1jiao);
-					putimage(400, 160, &img_xiaoyiyuan);
-					putimage(470, 160, &img_xinxilou);
-					putimage(190, 220, &img_3jiao);
-					putimage(260, 220, &img_canting);
-					putimage(330, 220, &img_atm);
-					putimage(400, 220, &img_tiyuguan);
-					putimage(470, 220, &img_zhixinglou);
-					
+		initgraph(640, 500);
+		// 获取窗口句柄
+		HWND hwnd = GetHWnd();
+		// 设置窗口标题文字
+		SetWindowText(hwnd, "用户界面");
 
-					while(i<n) {
-						if (MouseHit()) {
-							m2 = GetMouseMsg();
-							switch (m2.uMsg) {
-							case WM_LBUTTONDOWN:
-								if (m2.x >= 190 && m2.x <= 220 && m2.y >= 160 && m2.y <= 178) {
-									putimage(200, 185, &img_duigou);
-									a[i] = 1;
-									i++;
-								}
-								else if (m2.x >= 260 && m2.x <= 290 && m2.y >= 160 && m2.y <= 178) {
-									putimage(270, 185, &img_duigou);
-									a[i] = 2;
-									i++;
-								}
-								else if (m2.x >= 330 && m2.x <= 360 && m2.y >= 160 && m2.y <= 178) {
-									putimage(340, 185, &img_duigou);
-									a[i] = 3;
-									i++;
-								}
-								else if (m2.x >= 400 && m2.x <= 430 && m2.y >= 160 && m2.y <= 178) {
-									putimage(410, 185, &img_duigou);
-									a[i] = 4;
-									i++;
-								}
-								else if (m2.x >= 470 && m2.x <= 500 && m2.y >= 160 && m2.y <= 178) {
-									putimage(480, 185, &img_duigou);
-									a[i] = 5;
-									i++;
-								}
-								else if (m2.x >= 190 && m2.x <= 220 && m2.y >= 220 && m2.y <= 238) {
-									putimage(200, 245, &img_duigou);
-									a[i] = 6;
-									i++;
-								}
-								else if (m2.x >= 260 && m2.x <= 290 && m2.y >= 220 && m2.y <= 238) {
-									putimage(270, 245, &img_duigou);
-									a[i] = 7;
-									i++;
-								}
-								else if (m2.x >= 330 && m2.x <= 360 && m2.y >= 220 && m2.y <= 238) {
-									putimage(340, 245, &img_duigou);
-									a[i] = 8;
-									i++;
-								}
-								else if (m2.x >= 400 && m2.x <= 430 && m2.y >= 220 && m2.y <= 238) {
-									putimage(410, 245, &img_duigou);
-									a[i] = 9;
-									i++;
-								}
-								else if (m2.x >= 470 && m2.x <= 500 && m2.y >= 220 && m2.y <= 238) {
-									putimage(480, 245, &img_duigou);
-									a[i] = 10;
-									i++;
-								}
-							}
-						}
-							
-						
-					}
-					closegraph();
-
-					MGraph G;
-					creat(&G, m);
-					summ=path(&G, a, n, bestpath,arrive,leave);
-					system("pause");
-					getchar();
-					graph(&G, n, bestpath, arrive, leave, summ);
-
-
-					system("pause");
-					//break;
-				}
-				else if (m1.x >= 330 && m1.x <= 360 && m1.y >= 10 && m1.y <= 28) {
-					m = 2;
-					putimage(340, 35, &img_duigou);
-					outtextxy(10, 80, "输入你想去几个地方(0-9)：");
-					char ch = getc(stdin);
-					char chtest[10];
-					chtest[0] = ch;
-					n = atoi(chtest) + 1;
-					if (n == 10)
-						outtextxy(190, 80, "10");
-					else
-					{
-						_itoa(n, chtest, 10);
-						ch = chtest[0];
-						outtextxy(190, 80, ch);
-					}
-
-
-					outtextxy(10, 160, "选择要去的地点：");
-					putimage(190, 160, &img_sushe);
-					putimage(260, 160, &img_tushuguan);
-					putimage(330, 160, &img_1jiao);
-					putimage(400, 160, &img_xiaoyiyuan);
-					putimage(470, 160, &img_xinxilou);
-					putimage(190, 220, &img_3jiao);
-					putimage(260, 220, &img_canting);
-					putimage(330, 220, &img_atm);
-					putimage(400, 220, &img_tiyuguan);
-					putimage(470, 220, &img_zhixinglou);
-
-
-					while (i<n) {
-						if (MouseHit()) {
-							m2 = GetMouseMsg();
-							switch (m2.uMsg) {
-							case WM_LBUTTONDOWN:
-								if (m2.x >= 190 && m2.x <= 220 && m2.y >= 160 && m2.y <= 178) {
-									putimage(200, 185, &img_duigou);
-									a[i] = 1;
-									i++;
-								}
-								else if (m2.x >= 260 && m2.x <= 290 && m2.y >= 160 && m2.y <= 178) {
-									putimage(270, 185, &img_duigou);
-									a[i] = 2;
-									i++;
-								}
-								else if (m2.x >= 330 && m2.x <= 360 && m2.y >= 160 && m2.y <= 178) {
-									putimage(340, 185, &img_duigou);
-									a[i] = 3;
-									i++;
-								}
-								else if (m2.x >= 400 && m2.x <= 430 && m2.y >= 160 && m2.y <= 178) {
-									putimage(410, 185, &img_duigou);
-									a[i] = 4;
-									i++;
-								}
-								else if (m2.x >= 470 && m2.x <= 500 && m2.y >= 160 && m2.y <= 178) {
-									putimage(480, 185, &img_duigou);
-									a[i] = 5;
-									i++;
-								}
-								else if (m2.x >= 190 && m2.x <= 220 && m2.y >= 220 && m2.y <= 238) {
-									putimage(200, 245, &img_duigou);
-									a[i] = 6;
-									i++;
-								}
-								else if (m2.x >= 260 && m2.x <= 290 && m2.y >= 220 && m2.y <= 238) {
-									putimage(270, 245, &img_duigou);
-									a[i] = 7;
-									i++;
-								}
-								else if (m2.x >= 330 && m2.x <= 360 && m2.y >= 220 && m2.y <= 238) {
-									putimage(340, 245, &img_duigou);
-									a[i] = 8;
-									i++;
-								}
-								else if (m2.x >= 400 && m2.x <= 430 && m2.y >= 220 && m2.y <= 238) {
-									putimage(410, 245, &img_duigou);
-									a[i] = 9;
-									i++;
-								}
-								else if (m2.x >= 470 && m2.x <= 500 && m2.y >= 220 && m2.y <= 238) {
-									putimage(480, 245, &img_duigou);
-									a[i] = 10;
-									i++;
-								}
-							}
-						}
-
-
-					}
-					closegraph();
-
-					MGraph G;
-					creat(&G, m);
-					summ=path(&G, a, n, bestpath,arrive, leave);
-					system("pause");
-					getchar();
-					graph(&G, n, bestpath, arrive, leave, summ);
-
-
-					system("pause");
-				}
-				else if(m1.x >= 470 && m1.x <= 500 && m1.y >= 10 && m1.y <= 28) {
-					m = 3;
-					putimage(480, 35, &img_duigou);
-					outtextxy(10, 80, "输入你想去几个地方(0-9)：");
-					char ch = getc(stdin);
-					char chtest[10];
-					chtest[0] = ch;
-					n = atoi(chtest) + 1;
-					if (n == 10)
-						outtextxy(190, 80, "10");
-					else
-					{
-						_itoa(n, chtest, 10);
-						ch = chtest[0];
-						outtextxy(190, 80, ch);
-					}
-
-
-					outtextxy(10, 160, "选择要去的地点：");
-					putimage(190, 160, &img_sushe);
-					putimage(260, 160, &img_tushuguan);
-					putimage(330, 160, &img_1jiao);
-					putimage(400, 160, &img_xiaoyiyuan);
-					putimage(470, 160, &img_xinxilou);
-					putimage(190, 220, &img_3jiao);
-					putimage(260, 220, &img_canting);
-					putimage(330, 220, &img_atm);
-					putimage(400, 220, &img_tiyuguan);
-					putimage(470, 220, &img_zhixinglou);
-
-
-					while (i<n) {
-						if (MouseHit()) {
-							m2 = GetMouseMsg();
-							switch (m2.uMsg) {
-							case WM_LBUTTONDOWN:
-								if (m2.x >= 190 && m2.x <= 220 && m2.y >= 160 && m2.y <= 178) {
-									putimage(200, 185, &img_duigou);
-									a[i] = 1;
-									i++;
-								}
-								else if (m2.x >= 260 && m2.x <= 290 && m2.y >= 160 && m2.y <= 178) {
-									putimage(270, 185, &img_duigou);
-									a[i] = 2;
-									i++;
-								}
-								else if (m2.x >= 330 && m2.x <= 360 && m2.y >= 160 && m2.y <= 178) {
-									putimage(340, 185, &img_duigou);
-									a[i] = 3;
-									i++;
-								}
-								else if (m2.x >= 400 && m2.x <= 430 && m2.y >= 160 && m2.y <= 178) {
-									putimage(410, 185, &img_duigou);
-									a[i] = 4;
-									i++;
-								}
-								else if (m2.x >= 470 && m2.x <= 500 && m2.y >= 160 && m2.y <= 178) {
-									putimage(480, 185, &img_duigou);
-									a[i] = 5;
-									i++;
-								}
-								else if (m2.x >= 190 && m2.x <= 220 && m2.y >= 220 && m2.y <= 238) {
-									putimage(200, 245, &img_duigou);
-									a[i] = 6;
-									i++;
-								}
-								else if (m2.x >= 260 && m2.x <= 290 && m2.y >= 220 && m2.y <= 238) {
-									putimage(270, 245, &img_duigou);
-									a[i] = 7;
-									i++;
-								}
-								else if (m2.x >= 330 && m2.x <= 360 && m2.y >= 220 && m2.y <= 238) {
-									putimage(340, 245, &img_duigou);
-									a[i] = 8;
-									i++;
-								}
-								else if (m2.x >= 400 && m2.x <= 430 && m2.y >= 220 && m2.y <= 238) {
-									putimage(410, 245, &img_duigou);
-									a[i] = 9;
-									i++;
-								}
-								else if (m2.x >= 470 && m2.x <= 500 && m2.y >= 220 && m2.y <= 238) {
-									putimage(480, 245, &img_duigou);
-									a[i] = 10;
-									i++;
-								}
-							}
-						}
-
-
-					}
-					closegraph();
-
-					MGraph G;
-					creat(&G, m);
-					summ=path(&G, a, n, bestpath, arrive, leave);
-					system("pause");
-					getchar();
-					graph(&G, n, bestpath, arrive, leave, summ);
-
-
-					system("pause");
-				}
-			}
-			
+		setbkcolor(WHITE);
+		cleardevice();
+		char s[10];
+		char s1[2];
+		char s2[2];
+		InputBox(s, 10, "请输入你的出行时间：");
+		s1[0] = s[0];
+		s1[1] = s[1];
+		s2[0] = s[3];
+		s2[1] = s[4];
+		int n1 = atoi(s1);
+		int n2 = atoi(s2);
+		if (n1 >= 24||n1<0||n2>=60||n2<0) {
+			MessageBox(NULL, "输入的格式不对", "提示", MB_OK);
+			continue;
 		}
-		
+		int depaturetime = n1 * 60 + n2;
+		settextcolor(BLACK);
+		outtextxy(10, 10, "选择你的出行方式：");
+		putimage(190, 10, &img_buxing);
+		putimage(330, 10, &img_zixingche);
+		putimage(470, 10, &img_qiche);
+		int summ = 0;
+		int n = 0, i = 0;
+		while (summ!=-1) {
+			if (MouseHit()) {
+				m1 = GetMouseMsg();
+				switch (m1.uMsg)
+				{
+				case WM_LBUTTONDOWN:
+					if (m1.x >= 190 && m1.x <= 220 && m1.y >= 10 && m1.y <= 28) {
+						putimage(200, 35, &img_duigou);
+						m = 1;
+						outtextxy(10, 80, "输入你想去几个地方：");
+						char ch[10];
+						InputBox(ch, 10, "输入你想去几个地方：");
+						char chtest[10];
+						n = atoi(ch);
+						if (n > 10 || n < 1) {
+							MessageBox(NULL, "输入的数大于给定的范围", "提示", MB_OK);
+							summ = -1;
+							break;
+						}
+						if (n == 10)
+							outtextxy(190, 80, "10");
+						else
+						{
+							_itoa(n, chtest, 10);
+							outtextxy(190, 80, chtest);
+						}
+
+						outtextxy(10, 160, "选择要去的地点：");
+						putimage(190, 160, &img_sushe);
+						putimage(260, 160, &img_tushuguan);
+						putimage(330, 160, &img_1jiao);
+						putimage(400, 160, &img_xiaoyiyuan);
+						putimage(470, 160, &img_xinxilou);
+						putimage(190, 220, &img_3jiao);
+						putimage(260, 220, &img_canting);
+						putimage(330, 220, &img_atm);
+						putimage(400, 220, &img_tiyuguan);
+						putimage(470, 220, &img_zhixinglou);
+
+						while (i < n) {
+							if (MouseHit()) {
+								m2 = GetMouseMsg();
+								switch (m2.uMsg) {
+								case WM_LBUTTONDOWN:
+									if (m2.x >= 190 && m2.x <= 220 && m2.y >= 160 && m2.y <= 178) {
+										putimage(200, 185, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 1;
+										i++;
+										putimage(170, 320, &sushe);
+									}
+									else if (m2.x >= 260 && m2.x <= 290 && m2.y >= 160 && m2.y <= 178) {
+										putimage(270, 185, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 2;
+										i++;
+										putimage(170, 320, &tushuguan);
+									}
+									else if (m2.x >= 330 && m2.x <= 360 && m2.y >= 160 && m2.y <= 178) {
+										putimage(340, 185, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 3;
+										i++;
+										putimage(170, 320, &yijiao);
+									}
+									else if (m2.x >= 400 && m2.x <= 430 && m2.y >= 160 && m2.y <= 178) {
+										putimage(410, 185, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 4;
+										i++;
+										putimage(170, 320, &xiaoyiyuan);
+									}
+									else if (m2.x >= 470 && m2.x <= 500 && m2.y >= 160 && m2.y <= 178) {
+										putimage(480, 185, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 5;
+										i++;
+										putimage(170, 320, &xinxilou);
+									}
+									else if (m2.x >= 190 && m2.x <= 220 && m2.y >= 220 && m2.y <= 238) {
+										putimage(200, 245, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 6;
+										i++;
+										putimage(170, 320, &sanjiao);
+									}
+									else if (m2.x >= 260 && m2.x <= 290 && m2.y >= 220 && m2.y <= 238) {
+										putimage(270, 245, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 7;
+										i++;
+										putimage(170, 320, &canting);
+									}
+									else if (m2.x >= 330 && m2.x <= 360 && m2.y >= 220 && m2.y <= 238) {
+										putimage(340, 245, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 8;
+										i++;
+										putimage(170, 320, &qukuanji);
+									}
+									else if (m2.x >= 400 && m2.x <= 430 && m2.y >= 220 && m2.y <= 238) {
+										putimage(410, 245, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 9;
+										i++;
+										putimage(170, 320, &tiyuguan);
+									}
+									else if (m2.x >= 470 && m2.x <= 500 && m2.y >= 220 && m2.y <= 238) {
+										putimage(480, 245, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 10;
+										i++;
+										putimage(170, 320, &zhixinglou);
+									}
+								}
+							}
+
+
+						}
+						closegraph();
+
+						MGraph G;
+						create(&G, m);
+						summ = path(&G, a, n, bestpath, arrive, leave, depaturetime);
+						if (summ == -1) {
+							MessageBox(NULL, "限定时间无法达到，请重新输入", "提示", MB_OK);
+							break;
+						}
+						graph(&G, n, bestpath, arrive, leave, summ);
+
+					}
+					else if (m1.x >= 330 && m1.x <= 360 && m1.y >= 10 && m1.y <= 28) {
+						m = 2;
+						putimage(340, 35, &img_duigou);
+						outtextxy(10, 80, "输入你想去几个地方：");
+						char ch[10];
+						InputBox(ch, 10, "输入你想去几个地方：");
+						char chtest[10];
+						n = atoi(ch);
+						if (n > 10 || n < 1) {
+							MessageBox(NULL, "输入的数大于给定的范围", "提示", MB_OK);
+							summ = -1;
+							break;
+						}
+						if (n == 10)
+							outtextxy(190, 80, "10");
+						else
+						{
+							_itoa(n, chtest, 10);
+							outtextxy(190, 80, chtest);
+						}
+
+						outtextxy(10, 160, "选择要去的地点：");
+						putimage(190, 160, &img_sushe);
+						putimage(260, 160, &img_tushuguan);
+						putimage(330, 160, &img_1jiao);
+						putimage(400, 160, &img_xiaoyiyuan);
+						putimage(470, 160, &img_xinxilou);
+						putimage(190, 220, &img_3jiao);
+						putimage(260, 220, &img_canting);
+						putimage(330, 220, &img_atm);
+						putimage(400, 220, &img_tiyuguan);
+						putimage(470, 220, &img_zhixinglou);
+
+						while (i < n) {
+							if (MouseHit()) {
+								m2 = GetMouseMsg();
+								switch (m2.uMsg) {
+								case WM_LBUTTONDOWN:
+									if (m2.x >= 190 && m2.x <= 220 && m2.y >= 160 && m2.y <= 178) {
+										putimage(200, 185, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 1;
+										i++;
+										putimage(170, 320, &sushe);
+									}
+									else if (m2.x >= 260 && m2.x <= 290 && m2.y >= 160 && m2.y <= 178) {
+										putimage(270, 185, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 2;
+										i++;
+										putimage(170, 320, &tushuguan);
+									}
+									else if (m2.x >= 330 && m2.x <= 360 && m2.y >= 160 && m2.y <= 178) {
+										putimage(340, 185, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 3;
+										i++;
+										putimage(170, 320, &yijiao);
+									}
+									else if (m2.x >= 400 && m2.x <= 430 && m2.y >= 160 && m2.y <= 178) {
+										putimage(410, 185, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 4;
+										i++;
+										putimage(170, 320, &xiaoyiyuan);
+									}
+									else if (m2.x >= 470 && m2.x <= 500 && m2.y >= 160 && m2.y <= 178) {
+										putimage(480, 185, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 5;
+										i++;
+										putimage(170, 320, &xinxilou);
+									}
+									else if (m2.x >= 190 && m2.x <= 220 && m2.y >= 220 && m2.y <= 238) {
+										putimage(200, 245, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 6;
+										i++;
+										putimage(170, 320, &sanjiao);
+									}
+									else if (m2.x >= 260 && m2.x <= 290 && m2.y >= 220 && m2.y <= 238) {
+										putimage(270, 245, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 7;
+										i++;
+										putimage(170, 320, &canting);
+									}
+									else if (m2.x >= 330 && m2.x <= 360 && m2.y >= 220 && m2.y <= 238) {
+										putimage(340, 245, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 8;
+										i++;
+										putimage(170, 320, &qukuanji);
+									}
+									else if (m2.x >= 400 && m2.x <= 430 && m2.y >= 220 && m2.y <= 238) {
+										putimage(410, 245, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 9;
+										i++;
+										putimage(170, 320, &tiyuguan);
+									}
+									else if (m2.x >= 470 && m2.x <= 500 && m2.y >= 220 && m2.y <= 238) {
+										putimage(480, 245, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 10;
+										i++;
+										putimage(170, 320, &zhixinglou);
+									}
+								}
+							}
+
+
+						}
+						closegraph();
+
+						MGraph G;
+						create(&G, m);
+						summ = path(&G, a, n, bestpath, arrive, leave, depaturetime);
+						if (summ == -1) {
+							MessageBox(NULL, "限定时间无法达到，请重新输入", "提示", MB_OK);
+							break;
+						}
+						graph(&G, n, bestpath, arrive, leave, summ);
+
+					}
+					else if (m1.x >= 470 && m1.x <= 500 && m1.y >= 10 && m1.y <= 28) {
+						m = 3;
+						putimage(480, 35, &img_duigou);
+						outtextxy(10, 80, "输入你想去几个地方：");
+						char ch[10];
+						InputBox(ch, 10, "输入你想去几个地方：");
+						char chtest[10];
+						n = atoi(ch);
+						if (n > 10 || n < 1) {
+							MessageBox(NULL, "输入的数大于给定的范围", "提示", MB_OK);
+							summ = -1;
+							break;
+						}
+						if (n == 10)
+							outtextxy(190, 80, "10");
+						else
+						{
+							_itoa(n, chtest, 10);
+							outtextxy(190, 80, chtest);
+						}
+
+						outtextxy(10, 160, "选择要去的地点：");
+						putimage(190, 160, &img_sushe);
+						putimage(260, 160, &img_tushuguan);
+						putimage(330, 160, &img_1jiao);
+						putimage(400, 160, &img_xiaoyiyuan);
+						putimage(470, 160, &img_xinxilou);
+						putimage(190, 220, &img_3jiao);
+						putimage(260, 220, &img_canting);
+						putimage(330, 220, &img_atm);
+						putimage(400, 220, &img_tiyuguan);
+						putimage(470, 220, &img_zhixinglou);
+
+						while (i < n) {
+							if (MouseHit()) {
+								m2 = GetMouseMsg();
+								switch (m2.uMsg) {
+								case WM_LBUTTONDOWN:
+									if (m2.x >= 190 && m2.x <= 220 && m2.y >= 160 && m2.y <= 178) {
+										putimage(200, 185, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 1;
+										i++;
+										putimage(170, 320, &sushe);
+									}
+									else if (m2.x >= 260 && m2.x <= 290 && m2.y >= 160 && m2.y <= 178) {
+										putimage(270, 185, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 2;
+										i++;
+										putimage(170, 320, &tushuguan);
+									}
+									else if (m2.x >= 330 && m2.x <= 360 && m2.y >= 160 && m2.y <= 178) {
+										putimage(340, 185, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 3;
+										i++;
+										putimage(170, 320, &yijiao);
+									}
+									else if (m2.x >= 400 && m2.x <= 430 && m2.y >= 160 && m2.y <= 178) {
+										putimage(410, 185, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 4;
+										i++;
+										putimage(170, 320, &xiaoyiyuan);
+									}
+									else if (m2.x >= 470 && m2.x <= 500 && m2.y >= 160 && m2.y <= 178) {
+										putimage(480, 185, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 5;
+										i++;
+										putimage(170, 320, &xinxilou);
+									}
+									else if (m2.x >= 190 && m2.x <= 220 && m2.y >= 220 && m2.y <= 238) {
+										putimage(200, 245, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 6;
+										i++;
+										putimage(170, 320, &sanjiao);
+									}
+									else if (m2.x >= 260 && m2.x <= 290 && m2.y >= 220 && m2.y <= 238) {
+										putimage(270, 245, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 7;
+										i++;
+										putimage(170, 320, &canting);
+									}
+									else if (m2.x >= 330 && m2.x <= 360 && m2.y >= 220 && m2.y <= 238) {
+										putimage(340, 245, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 8;
+										i++;
+										putimage(170, 320, &qukuanji);
+									}
+									else if (m2.x >= 400 && m2.x <= 430 && m2.y >= 220 && m2.y <= 238) {
+										putimage(410, 245, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 9;
+										i++;
+										putimage(170, 320, &tiyuguan);
+									}
+									else if (m2.x >= 470 && m2.x <= 500 && m2.y >= 220 && m2.y <= 238) {
+										putimage(480, 245, &img_duigou);
+										putimage(0, 320, &white);
+										a[i] = 10;
+										i++;
+										putimage(170, 320, &zhixinglou);
+									}
+								}
+							}
+
+
+						}
+						closegraph();
+
+						MGraph G;
+						create(&G, m);
+						summ = path(&G, a, n, bestpath, arrive, leave, depaturetime);
+						if (summ == -1) {
+							MessageBox(NULL, "限定时间无法达到，请重新输入", "提示", MB_OK);
+							break;
+						}
+						graph(&G, n, bestpath, arrive, leave, summ);
+
+					}
+				}
+
+			}
+
+		}
 	}
-			
-	 closegraph();
-	
 }
